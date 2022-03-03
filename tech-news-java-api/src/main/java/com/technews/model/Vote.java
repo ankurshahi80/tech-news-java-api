@@ -3,11 +3,13 @@ package com.technews.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
-@Entity@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+@Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name="vote")
-public class Vote {
+public class Vote implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,8 +17,16 @@ public class Vote {
     private Integer userId;
     private Integer postId;
 
+    public Vote() {
+    }
+
     public Vote(Integer id, Integer userId, Integer postId) {
         this.id = id;
+        this.userId = userId;
+        this.postId = postId;
+    }
+
+    public Vote(Integer userId, Integer postId) {
         this.userId = userId;
         this.postId = postId;
     }

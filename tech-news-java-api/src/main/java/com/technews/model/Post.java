@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-@Table(name="post")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name = "post")
 public class Post implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -23,16 +24,22 @@ public class Post implements Serializable {
     @Transient
     private int voteCount;
     private Integer userId;
+
     @NotNull
     @Temporal(TemporalType.DATE)
-    @Column(name="posted_at")
-
+    @Column(name = "posted_at")
     private Date postedAt = new Date();
+
     @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name="updated_at")
     private Date updatedAt = new Date();
+
+    @OneToMany(mappedBy = "postId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
+
+    public Post() {
+    }
 
     public Post(Integer id, String title, String postUrl, String userName, int voteCount, Integer userId) {
         this.id = id;

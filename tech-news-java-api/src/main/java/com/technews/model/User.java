@@ -3,15 +3,13 @@ package com.technews.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import javax.xml.stream.events.Comment;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name="user")
-public class User implements Serializable {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -22,14 +20,17 @@ public class User implements Serializable {
     @Transient
     boolean loggedIn;
 
-    @OneToMany(mappedBy = "userId",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Post> posts;
-//    Need to use FetchType.LAZY to resolve multiple bags exception
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch =FetchType.LAZY)
     private List<Vote> votes;
-//    Need to use FetchType.LAZY to resolve multiple bags exception
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch =FetchType.LAZY)
     private List<Comment> comments;
+
+    public User() {
+    }
 
     public User(Integer id, String username, String email, String password) {
         this.id = id;
@@ -107,7 +108,14 @@ public class User implements Serializable {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return isLoggedIn() == user.isLoggedIn() && Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getPosts(), user.getPosts()) && Objects.equals(getVotes(), user.getVotes()) && Objects.equals(getComments(), user.getComments());
+        return isLoggedIn() == user.isLoggedIn() &&
+                Objects.equals(getId(), user.getId()) &&
+                Objects.equals(getUsername(), user.getUsername()) &&
+                Objects.equals(getEmail(), user.getEmail()) &&
+                Objects.equals(getPassword(), user.getPassword()) &&
+                Objects.equals(getPosts(), user.getPosts()) &&
+                Objects.equals(getVotes(), user.getVotes()) &&
+                Objects.equals(getComments(), user.getComments());
     }
 
     @Override
